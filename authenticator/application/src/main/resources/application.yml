@@ -1,0 +1,12 @@
+server:
+  port: 9999
+
+spring:
+  config:
+    import: 'classpath:/application-infrastructure.yml'
+
+
+logging:
+  level:
+    sql:
+      trace
