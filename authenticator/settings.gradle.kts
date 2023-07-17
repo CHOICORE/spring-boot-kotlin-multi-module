@@ -7,11 +7,6 @@ rootProject.children.forEach {
     println("module : '${it.buildFileName}' is applied.")
 }
 
-pluginManagement {
-    repositories {
-        mavenCentral()
-    }
-}
 dependencyResolutionManagement {
     @Suppress("UnstableApiUsage")
     this.repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -22,4 +17,3 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-

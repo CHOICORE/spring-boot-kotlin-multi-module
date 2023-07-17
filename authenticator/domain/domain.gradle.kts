@@ -1,4 +1,4 @@
 dependencies {
-    testRuntimeOnly(libs.junit.engine.jupiter)
+    testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(libs.bundles.junit)
 }

@@ -1,7 +1,10 @@
 [versions]
 kotlin = "1.9.0"
-spring_boot = "3.1.1"
 jvm = "17"
+
+# server
+spring_boot = "3.1.1"
+spring_io_dependency_management = "1.1.0"
 
 # test
 junit = "5.9.3"
@@ -10,6 +13,7 @@ assertj = "3.24.2"
 [plugins]
 # spring
 spring_boot = { id = "org.springframework.boot", version.ref = "spring_boot" }
+spring_io_dependency_management = { id = "io.spring.dependency-management", version.ref = "spring_io_dependency_management" }
 
 
 # kotlin
@@ -17,12 +21,13 @@ kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin_spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 
 [libraries]
-kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
-
+kotlin_reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+kotlin_stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+spring_boot_dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring_boot" }
 
 # test
+junit_jupiter_engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 junit_api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
-junit_engine_jupiter = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 junit_params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 

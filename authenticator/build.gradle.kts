@@ -7,16 +7,16 @@ plugins {
     alias(libs.plugins.spring.boot) apply false
 }
 
-// 전체 프로젝트 설정
+// 프로젝트 모듈 전체 설정
 allprojects {
     group = "me.choicore.api.authenticator"
     version = "0.0.1-SNAPSHOT"
 }
 
 val jvm: String = libs.versions.jvm.get()
-val kotlinReflect: MinimalExternalModuleDependency = libs.kotlin.reflect.get()
+val springBootDependencies: MinimalExternalModuleDependency = libs.spring.boot.dependencies.get()
 
-// 하위 모듈 설정
+// 서브 모듈 설정
 subprojects {
     val module = project.name
 
@@ -24,19 +24,14 @@ subprojects {
 
     // domain 모듈은 spring boot 의존성을 주입하지 않는다.
     if (module != "domain") {
-        apply(plugin = "kotlin-spring")
         println("module : '${module}' spring boot dependencies injected.")
     }
 
     dependencies {
 
-
-        implementation(kotlinReflect)
-
         // domain 모듈은 spring boot 의존성을 주입하지 않는다.
         if (module != "domain") {
-
-            implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
+            implementation(platform(springBootDependencies))
 
             testImplementation("org.springframework.boot:spring-boot-starter-test")
         }
