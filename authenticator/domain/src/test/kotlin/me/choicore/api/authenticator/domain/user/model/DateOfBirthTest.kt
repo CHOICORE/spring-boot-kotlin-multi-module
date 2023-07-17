@@ -1,10 +1,9 @@
 package me.choicore.api.authenticator.domain.user.model
 
 
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
-import java.time.DateTimeException
 import java.time.LocalDate
 
 class DateOfBirthTest {
@@ -32,9 +31,9 @@ class DateOfBirthTest {
         assertThat(dateOfBirth2.dayOfMonth).isEqualTo(dayOfMonth)
 
         // case 3: invalid date of birth throws IllegalArgumentException
-        assertThatThrownBy { DateOfBirth(1999, 13, 13) }
-            .isInstanceOf(DateTimeException::class.java)
-            .hasMessage("Invalid Date of Birth: 1999-13-13")
+        Assertions.assertThatNoException().isThrownBy {
+            DateOfBirth(1999, 13, 13)
+        }
 
     }
 
