@@ -21,9 +21,12 @@ kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin_spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 
 [libraries]
+# spring
+spring_boot_dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring_boot" }
+
+# kotlin
 kotlin_reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin_stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-spring_boot_dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring_boot" }
 
 # test
 junit_jupiter_engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }

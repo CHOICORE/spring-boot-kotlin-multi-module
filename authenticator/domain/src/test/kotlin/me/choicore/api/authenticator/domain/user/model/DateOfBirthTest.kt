@@ -1,15 +1,16 @@
 package me.choicore.api.authenticator.domain.user.model
 
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import java.time.DateTimeException
-import java.time.LocalDate
+
 
 class DateOfBirthTest {
+
     @Test
-    fun `생년월일 검증`() {
+    fun `test validate with create new instance`() {
 
         // given
         val year = 1993
@@ -17,25 +18,28 @@ class DateOfBirthTest {
         val dayOfMonth = 22
 
         // when
-        val dateOfBirth1 = DateOfBirth(LocalDate.of(year, month, dayOfMonth))
-        val dateOfBirth2 = DateOfBirth(year, month, dayOfMonth)
+        val dateOfBirth = DateOfBirth(year, month, dayOfMonth)
 
         // then
-        // case 1: newInstance - LocalDate.of(year, month, dayOfMonth)
-        assertThat(dateOfBirth1.year).isEqualTo(year)
-        assertThat(dateOfBirth1.month).isEqualTo(month)
-        assertThat(dateOfBirth1.dayOfMonth).isEqualTo(dayOfMonth)
-
-        // case 2: newInstance - DateOfBirth(year, month, dayOfMonth)
-        assertThat(dateOfBirth2.year).isEqualTo(year)
-        assertThat(dateOfBirth2.month).isEqualTo(month)
-        assertThat(dateOfBirth2.dayOfMonth).isEqualTo(dayOfMonth)
-
-        // case 3: invalid date of birth throws IllegalArgumentException
-        Assertions.assertThatThrownBy { DateOfBirth(1999, 13, 13) }
-            .isInstanceOf(DateTimeException::class.java)
-            .hasMessage("Invalid date of birth: 1999-13-13")
-
+        assertThat(dateOfBirth.year).isEqualTo(year)
+        assertThat(dateOfBirth.month).isEqualTo(month)
+        assertThat(dateOfBirth.dayOfMonth).isEqualTo(dayOfMonth)
     }
 
+    @Test
+    fun `test validate with invalid date value`() {
+
+        // given
+        val year = 9999
+        val month = 13
+        val dayOfMonth = 13
+
+        // then
+        assertThatThrownBy {
+            // when
+            DateOfBirth(year, month, dayOfMonth)
+        }
+            .isInstanceOf(DateTimeException::class.java)
+            .hasMessage("Invalid date of birth: ${year}-${month}-${dayOfMonth}")
+    }
 }
