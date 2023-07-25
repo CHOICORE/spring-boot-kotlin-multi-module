@@ -42,9 +42,19 @@ class UserServiceTest {
         }
 
         // when
-        val searchAll: List<UserProfile?> = userService.searchAll()
+        val searchAll: List<UserProfile> = userService.searchAll()
 
         // then
         assertThat(searchAll).size().isEqualTo(10)
+    }
+
+    @Test
+    fun `test validate with search all is not found`() {
+
+        // when
+        val searchAll: List<UserProfile> = userService.searchAll()
+
+        // then
+        assertThat(searchAll).size().isEqualTo(0)
     }
 }

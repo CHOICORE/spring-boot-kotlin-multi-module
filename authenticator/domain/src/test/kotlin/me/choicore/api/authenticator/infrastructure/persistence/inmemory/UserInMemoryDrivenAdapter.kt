@@ -18,7 +18,7 @@ import java.time.LocalDateTime
 class UserInMemoryDrivenAdapter : RegisterUserDrivenPort, RetrieveUserDrivenPort, ModifyUserDrivenPort, DeleteUserDrivenPort {
     private val db: UserInMemoryDb = UserInMemoryDb()
 
-    override fun register(registerUser: UserCommand.RegisterUser): Long {
+    override fun register(registerUser: UserCommand.RegisterUser): UserProfile {
         val userEntity = UserEntity(
             email = registerUser.email,
             password = registerUser.password,
@@ -27,15 +27,15 @@ class UserInMemoryDrivenAdapter : RegisterUserDrivenPort, RetrieveUserDrivenPort
             dateOfBirth = registerUser.dateOfBirth,
             registeredAt = LocalDateTime.now(), id = null, nickname = null, modifiedAt = null,
         )
-        return db.save(userEntity)
+        return db.save(userEntity).domain()
     }
 
-    @Throws(NoSuchElementException::class)
+    @Throws(IllegalStateException::class)
     override fun findById(id: Long): UserProfile {
         checkNotNull(db.findById(id)) { "Not Found User: $id" }.let { return it.domain() }
     }
 
-    override fun findAll(): List<UserProfile?> {
+    override fun findAll(): List<UserProfile> {
         val userProfiles: List<UserEntity> = db.findAll()
         return userProfiles.domains()
     }
@@ -53,25 +53,42 @@ class UserInMemoryDrivenAdapter : RegisterUserDrivenPort, RetrieveUserDrivenPort
             dateOfBirth = dateOfBirth ?: foundUserEntity.dateOfBirth,
             modifiedAt = LocalDateTime.now()
         )
-        db.save(copiedUserEntity)
-        return copiedUserEntity.domain()
+
+        return db.save(value = copiedUserEntity).domain()
+    }
+
+    override fun modifyUserProfile(modifyUser: UserCommand.ModifyUser): UserProfile {
+        val (id, nickname, username, gender, phone, dateOfBirth) = modifyUser
+
+        val foundUserEntity: UserEntity = checkNotNull(db.findById(id = id)) { "Not Found User: $id" }
+
+        val copiedUserEntity = foundUserEntity.copy(
+            id = id,
+            nickname = nickname ?: foundUserEntity.nickname,
+            gender = gender ?: foundUserEntity.gender,
+            username = username ?: foundUserEntity.username,
+            phone = phone ?: foundUserEntity.phone,
+            dateOfBirth = dateOfBirth ?: foundUserEntity.dateOfBirth,
+            modifiedAt = LocalDateTime.now()
+        )
+
+        return db.save(value = copiedUserEntity).domain()
+
     }
 
     @Throws(IllegalStateException::class)
     override fun deleteById(id: Long) {
         val deletedCount: Int = db.deleteById(id)
-        isDeleted(deletedCount)
+        check(deletedCount == 1) {
+            "Failed to delete user"
+        }
     }
 
     @Throws(IllegalStateException::class)
     override fun deleteByIds(ids: List<Long>) {
         val deletedCount = db.deleteByIds(ids)
-        isDeleted(deletedCount)
-    }
-
-    private fun isDeleted(deletedCount: Int) {
-        check(deletedCount < 1) {
-            "Failed to delete user"
+        check(deletedCount == ids.size) {
+            "Failed to delete users"
         }
     }
 }
@@ -97,6 +114,6 @@ private fun UserEntity.domain(): UserProfile {
     )
 }
 
-private fun List<UserEntity>.domains(): List<UserProfile?> {
+private fun List<UserEntity>.domains(): List<UserProfile> {
     return this.map { it.domain() }
 }

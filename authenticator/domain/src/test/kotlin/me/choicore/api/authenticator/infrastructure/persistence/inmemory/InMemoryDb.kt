@@ -19,7 +19,7 @@ internal abstract class InMemoryDb<V : Entity<ID>, ID> {
      * @param value [V] entity
      * @return [ID] of saved entity
      */
-    fun save(value: V): ID {
+    fun save(value: V): V {
         val id = value.id ?: run {
             val newId = generateId()
             value.javaClass.getDeclaredField("id").apply {
@@ -30,7 +30,7 @@ internal abstract class InMemoryDb<V : Entity<ID>, ID> {
             newId
         }
         db[id] = value
-        return id
+        return value
     }
 
 
@@ -52,7 +52,7 @@ internal abstract class InMemoryDb<V : Entity<ID>, ID> {
         return deletedCount
     }
 
-    private fun deletedCount(id: ID?): Int {
+    private fun deletedCount(id: ID): Int {
         var deletedCount = 0
         when (id) {
             null -> {
@@ -67,10 +67,7 @@ internal abstract class InMemoryDb<V : Entity<ID>, ID> {
         return deletedCount
     }
 
-    fun deleteAll(): Int = deletedCount(null)
-
     protected abstract fun generateId(): ID
-
 }
 
 internal class UserInMemoryDb : InMemoryDb<UserEntity, Long>() {

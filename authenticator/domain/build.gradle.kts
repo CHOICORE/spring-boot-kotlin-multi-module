@@ -1,15 +1,8 @@
 plugins {
-    kotlin("jvm")
+    id("plugins.bases.kotlin-base")
 }
 
 dependencies {
-    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.bundles.junit)
-}
-
-
-tasks {
-    withType<Test> {
-        useJUnitPlatform()
-    }
 }

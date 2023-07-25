@@ -1,6 +1,10 @@
 package me.choicore.api.authenticator.infrastructure.persistence.jpa.repository
 
-import me.choicore.api.authenticator.infrastructure.persistence.jpa.model.UserEntity
-import org.springframework.data.repository.CrudRepository
+import me.choicore.api.authenticator.domain.user.port.`in`.command.UserCommand
+import me.choicore.api.authenticator.domain.user.port.out.RegisterUserDrivenPort
 
-interface UserRepository : CrudRepository<UserEntity, Long>
+class UserRepository : RegisterUserDrivenPort {
+    override fun register(registerUser: UserCommand.RegisterUser): Long {
+        return 0L
+    }
+}
