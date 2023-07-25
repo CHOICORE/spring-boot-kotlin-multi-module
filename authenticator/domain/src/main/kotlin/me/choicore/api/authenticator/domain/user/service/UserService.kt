@@ -17,21 +17,16 @@ class UserService(
 ) : UserUseCase {
 
     override fun register(registerUser: UserCommand.RegisterUser): Long {
-        return registerUserDrivenPort.register(registerUser)
+        return registerUserDrivenPort.register(registerUser).id
     }
 
-    override fun searchAll(): List<UserProfile?> {
+    override fun searchAll(): List<UserProfile> {
         return retrieveUserDrivenPort.findAll()
-    }
-
-    override fun search(searchUser: UserCommand.SearchUser): List<UserProfile> {
-        TODO()
     }
 
     override fun search(id: Long): UserProfile {
         return retrieveUserDrivenPort.findById(id)
     }
-
 
     override fun modify(modifyUser: UserCommand.ModifyUser): UserProfile {
         return modifyUserDrivenPort.modifyUserProfile(
@@ -43,7 +38,6 @@ class UserService(
             dateOfBirth = modifyUser.dateOfBirth,
         )
     }
-
 
     override fun delete(deleteUser: UserCommand.DeleteUser) {
         deleteUserDrivenPort.deleteByIds(deleteUser.ids)
