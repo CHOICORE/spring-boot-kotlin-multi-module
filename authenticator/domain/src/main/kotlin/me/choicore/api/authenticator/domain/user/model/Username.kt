@@ -11,10 +11,7 @@ import me.choicore.api.authenticator.domain.util.Validator
 data class Username(
     val firstName: String,
     val lastName: String,
-) : Validator() {
-    init {
-        validate()
-    }
+) : Validator {
 
     @Throws(IllegalArgumentException::class)
     override fun validate() {

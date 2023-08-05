@@ -1,7 +1,7 @@
 package me.choicore.api.authenticator.domain.user.model
 
 import me.choicore.api.authenticator.domain.util.Validator
-import me.choicore.api.authenticator.domain.util.validateEmail
+import me.choicore.api.authenticator.domain.util.extention.isEmailValid
 import java.time.LocalDateTime
 
 /**
@@ -27,14 +27,11 @@ data class UserProfile(
     val dateOfBirth: DateOfBirth? = null,
     val registeredAt: LocalDateTime,
     val lastLoggedInAt: LocalDateTime? = null,
-) : Validator() {
-    init {
-        validate()
-    }
+) : Validator {
 
     @Throws(IllegalArgumentException::class)
     override fun validate() {
         // Validate email.
-        email.validateEmail()
+        this.email.isEmailValid()
     }
 }

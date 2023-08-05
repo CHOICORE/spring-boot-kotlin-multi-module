@@ -15,18 +15,15 @@ data class DateOfBirth(
     val year: Int,
     val month: Int,
     val dayOfMonth: Int,
-) : Validator() {
-    init {
-        validate()
-    }
+) : Validator {
 
     /**
      * Validates the date of birth using the provided year, month, and day of month.
      *
-     * This method checks if the combination of year, month, and day of month forms a valid date.
+     * This method checks if the combination of year, month, and day of month forms a Valid date.
      * If the date is invalid, it throws a [DateTimeException] with a specific error message.
      *
-     * @throws DateTimeException if the combination of year, month, and day of month does not form a valid date.
+     * @throws DateTimeException if the combination of year, month, and day of month does not form a Valid date.
      */
     override fun validate() {
         try {

@@ -2,51 +2,34 @@ package me.choicore.api.authenticator.domain.util
 
 
 /**
- * Validator Interface.
+ * Validation Interface
  *
- * An abstract class that defines a validator interface for data validation.
- * Subclasses must implement the [validate] method to provide specific validation logic.
- */
-abstract class Validator {
+ * Subclasses of this abstract class can implement the [validate] method to define their
+ * own validation rules and conditions. The [validate] method should throw an
+ * [IllegalArgumentException] with an appropriate error message if the validation fails.
+ * The [validate] method is intended to validate a specific set of conditions based on the
+ * implementation in each subclass.
 
-    /**
-     * Validates the data based on specific rules defined by subclasses.
-     * Subclasses must override this method to implement the validation logic.
-     */
-    @Throws(IllegalArgumentException::class)
-    protected abstract fun validate()
+ * @throws IllegalArgumentException if the validation fails with an appropriate error message.
+ */
+
+interface Validator {
+    fun validate()
 }
 
-/**
- * Checks whether the email associated with this user profile is valid.
- *
- * An email is considered valid if it meets the following criteria:
- *  - It is not blank (i.e., not empty or containing only whitespace).
- *  - It follows the standard email format, which consists of a local part (before '@')
- *    and a domain part (after '@') connected with an '@' symbol, and a valid top-level domain (TLD).
- *  - The local part allows characters: A-Z, a-z, 0-9, '.', '_', '%', '+', and '-'.
- *  - The domain part allows characters: A-Z, a-z, 0-9, '.', and '-'.
- *  - The TLD allows only letters and must be at least 2 characters long.
- *
- * @return [Boolean] `true` if the email is valid, `false` otherwise.
- *
- * @throws IllegalArgumentException if the email is blank.
- */
-@Throws(IllegalArgumentException::class)
-internal fun String.validateEmail() {
-    require(isNotBlank()) {
-        "email must not be blank."
-    }
-    require(Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$").matches(this)) {
-        "email format is not valid."
-    }
+internal inline fun <T : Validator> valid(block: () -> T) {
+    block().apply { this.validate() }
 }
 
-//internal interface Validator {
-//    fun validate()
-//}
+//abstract class Validator {
 //
-//internal inline fun <T : Validator> createModel(block: () -> T) {
-//    block()
-//        .apply { validate() }
+//    /**
+//     * Validates the specified conditions based on the implementation in each subclass.
+//     *
+//     * Subclasses should override this method to define their own validation rules and conditions.
+//     * If the validation fails, the method should throw an [IllegalArgumentException]
+//     * with an appropriate error message.
+//     */
+//    @Throws(IllegalArgumentException::class)
+//    protected abstract fun validate()
 //}
