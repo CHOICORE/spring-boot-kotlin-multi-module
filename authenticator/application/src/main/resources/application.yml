@@ -1,10 +1,8 @@
-server:
-  port: 9999
-
 spring:
   config:
-    import: 'classpath:/application-infrastructure.yml'
-
+    import:
+      - application-infrastructure.yml
+      - application-presentation.yml
 
 logging:
   level:
