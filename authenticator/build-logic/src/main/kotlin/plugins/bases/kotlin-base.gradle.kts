@@ -7,8 +7,15 @@ val libs: VersionCatalog = extensions.getByType<VersionCatalogsExtension>().name
 val jdk: VersionConstraint = libs.findVersion("jdk").get()
 
 plugins {
-    id("plugins.bases.java-base")
+    id("plugins.bases.jvm-base")
     kotlin("jvm")
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    //implementation("org.jetbrains.kotlin:kotlin-allopen")
+    //implementation("org.jetbrains.kotlin:kotlin-noarg")
+
 }
 
 kotlin {

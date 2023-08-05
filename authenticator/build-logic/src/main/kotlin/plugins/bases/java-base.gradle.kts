@@ -1,45 +1,20 @@
 package plugins.bases
 
-import plugins.CheckstyleUtil
+import gradle.kotlin.dsl.accessors._ff1654f0f9f36e3117440686fe8f247a.annotationProcessor
+import gradle.kotlin.dsl.accessors._ff1654f0f9f36e3117440686fe8f247a.compileOnly
 
 val libs: VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 plugins {
-    id("plugins.bases.base")
-    java
-    checkstyle
+    id("plugins.bases.jvm-base")
 }
 
-java {
-    /**
-     * Gets the project wide toolchain requirements that will be used for tasks requiring a tool from the toolchain (e.g. JavaCompile).
-     */
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of("${libs.findVersion("jdk").get()}"))
+configurations {
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
     }
-    /**
-     * Adds a task sourcesJar that will package the Java sources of the main SourceSet in a JAR with classifier sources.
-     */
-    withSourcesJar()
-    /**
-     * Adds a task javadocJar that will package the output of the javadoc task in a JAR with classifier javadoc.
-     */
-    withJavadocJar()
 }
 
-checkstyle {
-    config = resources.text.fromString(CheckstyleUtil.getCheckstyleConfig("/checkstyle.xml"))
-    maxWarnings = 0
-}
-
-/**
- * Enable deprecation messages when compiling Java code
- */
-tasks {
-    withType<JavaCompile>().configureEach {
-        options.compilerArgs.add("-Xlint:deprecation")
-    }
-    withType<Checkstyle> {
-        enabled = true
-    }
+dependencies {
+    compileOnly(libs.findLibrary("lombok").get())
 }

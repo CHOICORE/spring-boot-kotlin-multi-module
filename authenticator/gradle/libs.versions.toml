@@ -3,7 +3,7 @@ jdk = "17"
 kotlin = "1.9.0"
 spring-boot = "3.1.2"
 spring-io-dependency-management = "1.1.2"
-
+lombok = "1.18.22"
 # test
 junit-platform-launcher = "1.9.3"
 junit = "5.9.3"
@@ -16,13 +16,15 @@ spring-io-dependency-management = { id = "io.spring.dependency-management", vers
 
 # kotlin
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-noarg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
 
 [libraries]
 ## gradle plugin
 gradlePlugin-springBoot = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "spring-boot" }
 gradlePlugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 
 ## kotlin
 kotlin-noarg = { module = "org.jetbrains.kotlin:kotlin-noarg", version.ref = "kotlin" }
