@@ -1,0 +1,10 @@
+spring:
+  config:
+    import:
+      - application-infrastructure.yml
+      - application-presentation.yml
+
+logging:
+  level:
+    sql:
+      trace

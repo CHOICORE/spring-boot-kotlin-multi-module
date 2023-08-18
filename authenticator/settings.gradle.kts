@@ -12,11 +12,12 @@ dependencyResolutionManagement {
 
 val modules: MutableList<Module> = mutableListOf()
 
-module(name = ":authenticator-application", projectDir = "application")
-module(name = ":authenticator-presentation", projectDir = "presentation")
-module(name = ":authenticator-domain", projectDir = "domain")
-module(name = ":authenticator-infrastructure", projectDir = "infrastructure")
-module(name = ":authenticator-security", projectDir = "security")
+module(name = ":application", projectDir = "application")
+module(name = ":presentation", projectDir = "presentation")
+module(name = ":domain", projectDir = "domain")
+module(name = ":infrastructure", projectDir = "infrastructure")
+module(name = ":infrastructure:persistence-jpa", projectDir = "infrastructure/persistence-jpa")
+// module(name = ":security", projectDir = "security")
 
 data class Module(
     val name: String,

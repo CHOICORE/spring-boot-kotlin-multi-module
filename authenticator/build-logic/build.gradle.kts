@@ -6,6 +6,10 @@ plugins {
     `kotlin-dsl`
 }
 
+tasks.jar {
+    enabled = false
+}
+
 dependencies {
     implementation(libs.gradlePlugin.springBoot)
     implementation(libs.gradlePlugin.kotlin)

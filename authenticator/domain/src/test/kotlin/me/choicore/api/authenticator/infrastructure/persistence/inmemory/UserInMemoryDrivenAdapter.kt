@@ -5,7 +5,6 @@ import me.choicore.api.authenticator.domain.user.model.Gender
 import me.choicore.api.authenticator.domain.user.model.UserProfile
 import me.choicore.api.authenticator.domain.user.model.Username
 import me.choicore.api.authenticator.domain.user.port.`in`.command.UserCommand
-
 import me.choicore.api.authenticator.domain.user.port.out.DeleteUserDrivenPort
 import me.choicore.api.authenticator.domain.user.port.out.ModifyUserDrivenPort
 import me.choicore.api.authenticator.domain.user.port.out.RegisterUserDrivenPort
@@ -18,7 +17,7 @@ import java.time.LocalDateTime
 class UserInMemoryDrivenAdapter : RegisterUserDrivenPort, RetrieveUserDrivenPort, ModifyUserDrivenPort, DeleteUserDrivenPort {
     private val db: UserInMemoryDb = UserInMemoryDb()
 
-    override fun register(registerUser: UserCommand.RegisterUser): UserProfile {
+    override fun register(registerUser: UserCommand.RegisterUser): Long {
         val userEntity = UserEntity(
             email = registerUser.email,
             password = registerUser.password,
@@ -27,15 +26,15 @@ class UserInMemoryDrivenAdapter : RegisterUserDrivenPort, RetrieveUserDrivenPort
             dateOfBirth = registerUser.dateOfBirth,
             registeredAt = LocalDateTime.now(), id = null, nickname = null, modifiedAt = null,
         )
-        return db.save(userEntity).domain()
+        return db.save(userEntity)
     }
 
-    @Throws(IllegalStateException::class)
+    @Throws(NoSuchElementException::class)
     override fun findById(id: Long): UserProfile {
         checkNotNull(db.findById(id)) { "Not Found User: $id" }.let { return it.domain() }
     }
 
-    override fun findAll(): List<UserProfile> {
+    override fun findAll(): List<UserProfile?> {
         val userProfiles: List<UserEntity> = db.findAll()
         return userProfiles.domains()
     }
@@ -51,44 +50,27 @@ class UserInMemoryDrivenAdapter : RegisterUserDrivenPort, RetrieveUserDrivenPort
             username = username ?: foundUserEntity.username,
             phone = phone ?: foundUserEntity.phone,
             dateOfBirth = dateOfBirth ?: foundUserEntity.dateOfBirth,
-            modifiedAt = LocalDateTime.now()
+            modifiedAt = LocalDateTime.now(),
         )
-
-        return db.save(value = copiedUserEntity).domain()
-    }
-
-    override fun modifyUserProfile(modifyUser: UserCommand.ModifyUser): UserProfile {
-        val (id, nickname, username, gender, phone, dateOfBirth) = modifyUser
-
-        val foundUserEntity: UserEntity = checkNotNull(db.findById(id = id)) { "Not Found User: $id" }
-
-        val copiedUserEntity = foundUserEntity.copy(
-            id = id,
-            nickname = nickname ?: foundUserEntity.nickname,
-            gender = gender ?: foundUserEntity.gender,
-            username = username ?: foundUserEntity.username,
-            phone = phone ?: foundUserEntity.phone,
-            dateOfBirth = dateOfBirth ?: foundUserEntity.dateOfBirth,
-            modifiedAt = LocalDateTime.now()
-        )
-
-        return db.save(value = copiedUserEntity).domain()
-
+        db.save(copiedUserEntity)
+        return copiedUserEntity.domain()
     }
 
     @Throws(IllegalStateException::class)
     override fun deleteById(id: Long) {
         val deletedCount: Int = db.deleteById(id)
-        check(deletedCount == 1) {
-            "Failed to delete user"
-        }
+        isDeleted(deletedCount)
     }
 
     @Throws(IllegalStateException::class)
     override fun deleteByIds(ids: List<Long>) {
         val deletedCount = db.deleteByIds(ids)
-        check(deletedCount == ids.size) {
-            "Failed to delete users"
+        isDeleted(deletedCount)
+    }
+
+    private fun isDeleted(deletedCount: Int) {
+        check(deletedCount < 1) {
+            "Failed to delete user"
         }
     }
 }
@@ -96,7 +78,7 @@ class UserInMemoryDrivenAdapter : RegisterUserDrivenPort, RetrieveUserDrivenPort
 private fun UserEntity.domain(): UserProfile {
     return UserProfile(
         id = this.id!!,
-        nickname = this.nickname,
+        nickname = this.nickname!!,
         registeredAt = this.registeredAt,
         gender = Gender.UNKNOWN,
         username = Username(
@@ -114,6 +96,6 @@ private fun UserEntity.domain(): UserProfile {
     )
 }
 
-private fun List<UserEntity>.domains(): List<UserProfile> {
+private fun List<UserEntity>.domains(): List<UserProfile?> {
     return this.map { it.domain() }
 }

@@ -12,9 +12,8 @@ interface RegisterUserDrivenPort {
      * User Registration Method
      *
      * @param registerUser The [UserCommand.RegisterUser] object containing user registration information.
-     * @return A [UserProfile] object representing the newly registered user.
+     * @return The identifier ([UserProfile.id]) of the newly registered user.
      */
-    fun register(registerUser: UserCommand.RegisterUser): UserProfile
-
+    fun register(registerUser: UserCommand.RegisterUser): Long
 
 }

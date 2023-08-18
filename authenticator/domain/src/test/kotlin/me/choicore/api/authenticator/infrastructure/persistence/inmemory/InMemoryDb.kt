@@ -2,39 +2,26 @@ package me.choicore.api.authenticator.infrastructure.persistence.inmemory
 
 import me.choicore.api.authenticator.infrastructure.persistence.inmemory.model.UserEntity
 
-internal interface Entity<ID> {
-    val id: ID?
-}
+internal interface Entity<K> {
+    val id: K?
 
-internal abstract class InMemoryDb<V : Entity<ID>, ID> {
-
-    protected val db = mutableMapOf<ID, V>()
-
-    /**
-     * Save entity to db.
-     *
-     * If entity has id, then update entity.
-     * If entity has no id, then create entity.
-     *
-     * @param value [V] entity
-     * @return [ID] of saved entity
-     */
-    fun save(value: V): V {
-        val id = value.id ?: run {
-            val newId = generateId()
-            value.javaClass.getDeclaredField("id").apply {
-                isAccessible = true
-                set(value, newId)
-                isAccessible = false
-            }
-            newId
-        }
-        db[id] = value
-        return value
+    fun id(): K? {
+        return this.id
     }
 
+}
 
-    fun findById(id: ID): V? {
+internal abstract class InMemoryDb<V : Entity<K>, K> {
+
+    protected val db = mutableMapOf<K, V>()
+
+    fun save(value: V): K {
+        val id = value.id ?: generateId()
+        db[id] = value
+        return id
+    }
+
+    fun findById(id: K): V? {
         return db[id]
     }
 
@@ -42,9 +29,9 @@ internal abstract class InMemoryDb<V : Entity<ID>, ID> {
         return db.values.toList()
     }
 
-    fun deleteById(id: ID): Int = deletedCount(id)
+    fun deleteById(id: K): Int = deletedCount(id)
 
-    fun deleteByIds(ids: List<ID>): Int {
+    fun deleteByIds(ids: List<K>): Int {
         var deletedCount = 0
         ids.forEach { id ->
             deletedCount += deletedCount(id)
@@ -52,7 +39,7 @@ internal abstract class InMemoryDb<V : Entity<ID>, ID> {
         return deletedCount
     }
 
-    private fun deletedCount(id: ID): Int {
+    private fun deletedCount(id: K?): Int {
         var deletedCount = 0
         when (id) {
             null -> {
@@ -67,7 +54,10 @@ internal abstract class InMemoryDb<V : Entity<ID>, ID> {
         return deletedCount
     }
 
-    protected abstract fun generateId(): ID
+    fun deleteAll(): Int = deletedCount(null)
+
+    protected abstract fun generateId(): K
+
 }
 
 internal class UserInMemoryDb : InMemoryDb<UserEntity, Long>() {
@@ -76,6 +66,7 @@ internal class UserInMemoryDb : InMemoryDb<UserEntity, Long>() {
         val maxId = db.keys.maxOrNull() ?: 0L
         return maxId + this.step
     }
+
 }
 
 

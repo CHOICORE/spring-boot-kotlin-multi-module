@@ -9,20 +9,18 @@ plugins {
 }
 configurations {
 
-    compileOnly {
-        extendsFrom(configurations.annotationProcessor.get())
-    }
 
-    all {
-        exclude(group = "org.junit.platform", module = "junit-platform-launcher")
-        exclude(group = "org.junit.jupiter", module = "junit-jupiter-api")
-        exclude(group = "org.junit.jupiter", module = "junit-jupiter-params")
-        exclude(group = "org.assertj", module = "assertj-core")
-    }
+//    all {
+//        exclude(group = "org.junit.platform", module = "junit-platform-launcher")
+//        exclude(group = "org.junit.jupiter", module = "junit-jupiter-api")
+//        exclude(group = "org.junit.jupiter", module = "junit-jupiter-params")
+//        exclude(group = "org.assertj", module = "assertj-core")
+//    }
 }
 
 dependencies {
-//    implementation("org.springframework.boot:spring-boot-starter")
+
+    // implementation("org.springframework.boot:spring-boot-starter")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 

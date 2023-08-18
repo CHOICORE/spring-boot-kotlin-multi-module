@@ -1,35 +1,16 @@
 package me.choicore.api.authenticator.domain.util
 
-
 /**
- * Validation Interface
+ * Validator Interface.
  *
- * Subclasses of this abstract class can implement the [validate] method to define their
- * own validation rules and conditions. The [validate] method should throw an
- * [IllegalArgumentException] with an appropriate error message if the validation fails.
- * The [validate] method is intended to validate a specific set of conditions based on the
- * implementation in each subclass.
-
- * @throws IllegalArgumentException if the validation fails with an appropriate error message.
+ * An abstract class that defines a validator interface for data validation.
+ * Subclasses must implement the [validate] method to provide specific validation logic.
  */
+abstract class Validator {
 
-interface Validator {
-    fun validate()
+    /**
+     * Validates the data based on specific rules defined by subclasses.
+     * Subclasses must override this method to implement the validation logic.
+     */
+    protected abstract fun validate()
 }
-
-internal inline fun <T : Validator> valid(block: () -> T) {
-    block().apply { this.validate() }
-}
-
-//abstract class Validator {
-//
-//    /**
-//     * Validates the specified conditions based on the implementation in each subclass.
-//     *
-//     * Subclasses should override this method to define their own validation rules and conditions.
-//     * If the validation fails, the method should throw an [IllegalArgumentException]
-//     * with an appropriate error message.
-//     */
-//    @Throws(IllegalArgumentException::class)
-//    protected abstract fun validate()
-//}

@@ -11,22 +11,18 @@ interface RetrieveUserDrivenPort {
     /**
      * Retrieves Registered a list of UserProfiles from the data source.
      *
-     * @return A [List] of [UserProfile] registered user profiles. An empty list is returned if there are no user profiles.
-     *
-     * @see UserProfile
+     * @return [List] of [UserProfile]
      */
-    fun findAll(): List<UserProfile>
+    fun findAll(): List<UserProfile?>
 
     /**
-     * Retrieves Registered a UserProfiles from the data source.
+     * Find the user profile by its identifier number.
      *
      * @param id The identifier number of the user profile to find.
-     * @return The [UserProfile] object corresponding to the given identifier number
-     *
-     * @throws IllegalStateException When the user profile corresponding to the given identifier number cannot be found.
-     *
-     * @see UserProfile
+     * @return The [UserProfile] object corresponding to the given identifier number, or null if not found.
+     * @throws NoSuchElementException When the user profile corresponding to the given identifier number cannot be found.
      */
-    @Throws(IllegalStateException::class)
+    @Throws(NoSuchElementException::class)
     fun findById(id: Long): UserProfile
+
 }

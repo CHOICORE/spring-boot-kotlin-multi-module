@@ -16,20 +16,20 @@ interface UserUseCase {
      */
     fun register(registerUser: UserCommand.RegisterUser): Long
 
-//    /**
-//     * Searches for user profiles that match the search criteria specified in the [UserCommand.SearchUser] object.
-//     *
-//     * @param searchUser The [UserCommand.SearchUser] object containing search criteria.
-//     * @return A list of [UserProfile] objects that match the search criteria. Returns an empty list if no matches are found.
-//     */
-//    fun search(searchUser: UserCommand.SearchUser): List<UserProfile>
+    /**
+     * Searches for user profiles that match the search criteria specified in the [UserCommand.SearchUser] object.
+     *
+     * @param searchUser The [UserCommand.SearchUser] object containing search criteria.
+     * @return A list of [UserProfile] objects that match the search criteria. Returns an empty list if no matches are found.
+     */
+    fun search(searchUser: UserCommand.SearchUser): List<UserProfile?>
 
     /**
      * Retrieves a list of all user profiles.
      *
      * @return A list of registered  [UserProfile] objects. Returns an empty list if no user profiles are available.
      */
-    fun searchAll(): List<UserProfile>
+    fun searchAll(): List<UserProfile?>
 
     /**
      * Finds a user profile by the given identifier number.
